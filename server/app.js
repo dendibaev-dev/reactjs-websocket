@@ -24,11 +24,24 @@ io = socket(server, {
   },
 });
 
-io.on("connection", function (socket) {
-  console.log("A user connected");
+let productsList = [];
+
+io.on("connection", (client) => {
+  io.emit("connected", productsList);
+
+  client.on("add_product", (product) => {
+    productsList.push(product);
+    io.emit("connected", productsList);
+  });
+
+  client.on("delete_product", (id) => {
+    productsList = productsList.filter((product) => product.key !== id);
+
+    io.emit("connected", productsList);
+  });
 
   //Whenever someone disconnects this piece of code executed
-  socket.on("disconnect", function () {
+  client.on("disconnect", function () {
     console.log("A user disconnected");
   });
 });

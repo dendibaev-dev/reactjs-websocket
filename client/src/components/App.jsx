@@ -1,25 +1,35 @@
-import { useEffect } from "react";
-import io from "socket.io-client";
+import { useState } from "react";
+import { Layout, Button } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 
-let socket;
-
-const CONNECTION_PORT = "localhost:8000/";
+import Add from "./add";
+import Products from "./products";
 
 function App() {
-  useEffect(() => {
-    socket = io(CONNECTION_PORT);
-  }, []);
-
-  useEffect(() => {
-    socket.on("connection", () => {
-      console.log("connected");
-    });
-  }, []);
+  const [addProductIsActive, setAddProductIsActive] = useState(false);
 
   return (
-    <div className="App">
-      <h1>App</h1>
-    </div>
+    <Layout>
+      <Button
+        type="primary"
+        shape="circle"
+        size="large"
+        onClick={() => setAddProductIsActive(true)}
+        style={{
+          right: "5rem",
+          bottom: "5rem",
+          height: "3.25rem",
+          width: "3.25rem",
+          position: "fixed",
+        }}
+        icon={<PlusOutlined />}
+      />
+      <Add
+        isActive={addProductIsActive}
+        onClose={() => setAddProductIsActive(false)}
+      />
+      <Products />
+    </Layout>
   );
 }
 
