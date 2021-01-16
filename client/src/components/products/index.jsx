@@ -20,7 +20,7 @@ const Products = () => {
 
   const columns = [
     {
-      title: "Full Name",
+      title: "Name",
       width: 100,
       dataIndex: "name",
       key: "name",
@@ -38,7 +38,6 @@ const Products = () => {
       width: 100,
       dataIndex: "price",
       key: "price",
-      fixed: "left",
       render: (price) => `${price}$`,
     },
     {
@@ -70,11 +69,7 @@ const Products = () => {
       <EditProduct
         product={editProduct}
         isActive={editProductIsActive}
-        onClose={() => {
-          setEditProduct(null);
-          console.log("Sdasdas");
-          setEditProductIsActive(false);
-        }}
+        onClose={() => setEditProductIsActive(false)}
       />
     </>
   );

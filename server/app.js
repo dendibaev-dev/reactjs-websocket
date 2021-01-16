@@ -28,6 +28,7 @@ io = socket(server, {
 let productsList = [];
 
 io.on("connection", (client) => {
+  console.log("connection");
   io.emit("connected", productsList);
 
   client.on("add_product", (product) => {
@@ -45,10 +46,16 @@ io.on("connection", (client) => {
     io.emit("connected", productsList);
   });
 
-  client.on("get_product", (id) => {
-    const product = productsList.filter((product) => product.key === id);
+  client.on("edit_product", (newProduct) => {
+    productsList = productsList.map((product) => {
+      if (product.key === newProduct.key) {
+        return newProduct;
+      } else {
+        return product;
+      }
+    });
 
-    io.emit("post_product", ...product);
+    io.emit("connected", productsList);
   });
 
   //Whenever someone disconnects this piece of code executed

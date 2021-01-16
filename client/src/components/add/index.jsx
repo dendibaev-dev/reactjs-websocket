@@ -9,9 +9,10 @@ const Add = ({ isActive, onClose }) => {
   const methods = useForm();
 
   const submitForm = (data) => {
-    socket.emit("add_product", data);
-
-    onClose();
+    if (data.price > 0) {
+      socket.emit("add_product", data);
+      onClose();
+    }
   };
 
   return (

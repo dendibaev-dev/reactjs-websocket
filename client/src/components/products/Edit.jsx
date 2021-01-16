@@ -2,10 +2,16 @@ import { FormProvider, useForm } from "react-hook-form";
 import { Modal } from "antd";
 import PropTypes from "prop-types";
 
+import io from "../../socket";
 import ProductForm from "../ProductForm";
 
 const EditProduct = ({ product, isActive, onClose }) => {
   const methods = useForm();
+
+  const submit = (data) => {
+    io.emit("edit_product", { key: product.key, ...data });
+    onClose();
+  };
 
   return (
     <FormProvider {...methods}>
@@ -13,8 +19,9 @@ const EditProduct = ({ product, isActive, onClose }) => {
         title="Edit product"
         centered
         visible={isActive}
-        onOk={onClose}
+        onOk={methods.handleSubmit(submit)}
         onCancel={onClose}
+        destroyOnClose={true}
       >
         <ProductForm mode="edit" product={product} />
       </Modal>
