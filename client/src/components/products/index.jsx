@@ -1,10 +1,14 @@
 import { useState, useEffect } from "react";
-import { Table, Button } from "antd";
+import { Table, Space, Button } from "antd";
+import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 
 import socket from "../../socket";
+import EditProduct from "./Edit";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
+  const [editProductIsActive, setEditProductIsActive] = useState(false);
+  const [editProduct, setEditProduct] = useState(null);
 
   useEffect(() => {
     socket.on("connected", (data) => {
@@ -42,13 +46,38 @@ const Products = () => {
       key: "operation",
       fixed: "right",
       width: 100,
-      render: ({ key }) => (
-        <Button onClick={() => deleteProduct(key)}>Delete</Button>
+      render: (product) => (
+        <Space>
+          <Button
+            icon={<EditOutlined />}
+            onClick={() => {
+              setEditProduct(product);
+              setEditProductIsActive(true);
+            }}
+          />
+          <Button
+            icon={<DeleteOutlined />}
+            onClick={() => deleteProduct(product.key)}
+          />
+        </Space>
       ),
     },
   ];
 
-  return <Table columns={columns} dataSource={products} />;
+  return (
+    <>
+      <Table columns={columns} dataSource={products} />
+      <EditProduct
+        product={editProduct}
+        isActive={editProductIsActive}
+        onClose={() => {
+          setEditProduct(null);
+          console.log("Sdasdas");
+          setEditProductIsActive(false);
+        }}
+      />
+    </>
+  );
 };
 
 export default Products;

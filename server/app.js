@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const socket = require("socket.io");
+const uniqid = require("uniqid");
 const app = express();
 
 let allowCrossDomain = function (req, res, next) {
@@ -30,7 +31,11 @@ io.on("connection", (client) => {
   io.emit("connected", productsList);
 
   client.on("add_product", (product) => {
-    productsList.push(product);
+    productsList.push({
+      key: uniqid(),
+      ...product,
+    });
+
     io.emit("connected", productsList);
   });
 
@@ -38,6 +43,12 @@ io.on("connection", (client) => {
     productsList = productsList.filter((product) => product.key !== id);
 
     io.emit("connected", productsList);
+  });
+
+  client.on("get_product", (id) => {
+    const product = productsList.filter((product) => product.key === id);
+
+    io.emit("post_product", ...product);
   });
 
   //Whenever someone disconnects this piece of code executed

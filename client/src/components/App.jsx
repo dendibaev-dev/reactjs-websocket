@@ -18,8 +18,8 @@ function App() {
         style={{
           right: "5rem",
           bottom: "5rem",
-          height: "3.25rem",
-          width: "3.25rem",
+          height: "4rem",
+          width: "4rem",
           position: "fixed",
         }}
         icon={<PlusOutlined />}

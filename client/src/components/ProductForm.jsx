@@ -1,7 +1,8 @@
 import { Form, Input, Select, InputNumber } from "antd";
 import { useFormContext, Controller } from "react-hook-form";
+import PropTypes from "prop-types";
 
-const ProductForm = () => {
+const ProductForm = ({ mode, product }) => {
   const { control } = useFormContext();
 
   return (
@@ -10,7 +11,7 @@ const ProductForm = () => {
         <Controller
           name="name"
           control={control}
-          defaultValue={""}
+          defaultValue={mode === "edit" ? product.name : ""}
           rules={{ required: true }}
           render={({ onChange, value }) => (
             <Input placeholder="Name" value={value} onChange={onChange} />
@@ -21,7 +22,7 @@ const ProductForm = () => {
         <Controller
           name="brand"
           control={control}
-          defaultValue={"samsung"}
+          defaultValue={mode === "edit" ? product.brand : "samsung"}
           rules={{ required: true }}
           render={({ onChange, value }) => (
             <Select value={value} onChange={onChange}>
@@ -35,7 +36,7 @@ const ProductForm = () => {
         <Controller
           name="price"
           control={control}
-          defaultValue={0}
+          defaultValue={mode === "edit" ? product.price : 0}
           rules={{ required: true }}
           render={({ onChange, value }) => (
             <InputNumber
@@ -49,6 +50,11 @@ const ProductForm = () => {
       </Form.Item>
     </Form>
   );
+};
+
+ProductForm.PropType = {
+  mode: PropTypes.string.isRequired,
+  product: PropTypes.object,
 };
 
 export default ProductForm;

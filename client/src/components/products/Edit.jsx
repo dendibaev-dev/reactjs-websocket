@@ -2,36 +2,30 @@ import { FormProvider, useForm } from "react-hook-form";
 import { Modal } from "antd";
 import PropTypes from "prop-types";
 
-import socket from "../../socket";
 import ProductForm from "../ProductForm";
 
-const Add = ({ isActive, onClose }) => {
+const EditProduct = ({ product, isActive, onClose }) => {
   const methods = useForm();
-
-  const submitForm = (data) => {
-    socket.emit("add_product", data);
-
-    onClose();
-  };
 
   return (
     <FormProvider {...methods}>
       <Modal
-        title="Add new product"
+        title="Edit product"
         centered
         visible={isActive}
-        onOk={methods.handleSubmit(submitForm)}
+        onOk={onClose}
         onCancel={onClose}
       >
-        <ProductForm mode="create" />
+        <ProductForm mode="edit" product={product} />
       </Modal>
     </FormProvider>
   );
 };
 
-Add.PropType = {
+EditProduct.PropType = {
+  product: PropTypes.object.isRequired,
   isActive: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
 };
 
-export default Add;
+export default EditProduct;
